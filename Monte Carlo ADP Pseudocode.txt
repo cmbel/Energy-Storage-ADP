@@ -1,0 +1,95 @@
+
+Pseudocode for Minimizing Electricity Cost using Monte Carlo and ADP Double-Pass Algorithm
+
+Import libraries
+
+Variables and Parameters:
+    T: Total number of time intervals (e.g., 48 for 30-min intervals in 24 hours)
+    load[t]: Household energy demand at time t
+    solar[t]: Solar energy generation at time t
+    price[t]: Energy price at time t
+    B_max: Maximum battery capacity (kWh)
+    P_charge_max: Maximum charging power (kW)
+    P_discharge_max: Maximum discharging power (kW)
+    SOC_min: Minimum SOC (%)
+    SOC_max: Maximum SOC (%)
+    efficiency_charge: Battery charging efficiency
+    efficiency_discharge: Battery discharging efficiency
+    V[t, b]: Value function approximation at time t with battery energy (kWh) level b
+    policy[t, b]: Chosen battery action at time t with battery energy (kWh) level b
+   
+Import solar and load data
+	solar_df = pd.read_csv( solar_data.csv , header= None)
+	load_df = pdf.read_csv( load_data.csv, header = None)
+
+Probability Distribution Function (PDF) Fitting
+	Find PDFs that fit solar and load intervals data
+	load_PDF, solar_PDF
+	Plot historgram, plot PDF function, plot Q-Q Plot to determine if PDF fits the data well
+
+Initialization:
+    Set V[t, b] = 0 for all t and b
+    Set policy[t, b] = “idle” for all t and b
+	Number of possible actions = int(P_discharge_max + P_charge_max + 1)  # +1 for the idle action
+	Action Space = np.arange(-P_discharge_max, P_charge_max + 1, 1)	# battery can chose to discharge or charge, in increments of 1 kW
+
+FOR episode = 1 TO K_episodes: # Monte Carlo method 
+    Generate a new random simulated load and solar data using PDFs  
+	load[t] = np.random.load_PDF(PDF parameters)
+	solar[t] = np.random.solar_PDF(PDF parameters)
+    
+    FORWARD PASS (Policy Derivation and Trajectory Generation):
+        Set SOC[0] = 0 (Initial battery state of charge level starts at empty)
+
+        FOR t = 0 TO T-1:
+            # Given the current state, select action a based on the current policy
+            action = policy[t, battery_energy[t]]
+			
+			# Check if action adheres to constraints given current state, if not, modify or reject action
+            action = validate_action(battery[t], action, SOC_min, SOC_max, P_charge_max, P_discharge_max)
+
+            # Calculate cost and update system state based on the action
+            cost[t] = (load[t] - solar[t] + battery_energy[t])*price[t]
+        
+            # Update battery state ensuring the adherence to constraints
+            battery_energy[t+1] = update_battery_state(battery_energy[t], action, B_max, P_charge_max, P_discharge_max, SOC_min, SOC_max, efficiency_charge, efficiency_discharge)
+            
+            # Record the trajectory (state, action transitions, and observed costs)
+            trajectory[t] = (battery_energy[t], action, cost[t])
+            
+    BACKWARD PASS (Value Function Update):
+        # Initialize a container to store future value approximations for each t
+        future_values = []
+
+		# Start at the final state (T-1) and iterate backward to 0
+		for t in range(T-1, -1, -1):
+            # Get trajectory information
+            (b, a, c) = trajectory[t]
+            
+            # Future cost is the average of the stored future values if available, else zero
+            if t < T-1
+				future_cost = mean(future_values[t+1])
+			else
+				future_values[t+1] = 0
+
+			# Update the Value Function approximation using the observed cost and the mean future value
+			V(t, s_t) = cost(t, s_t, a_t) + mean(V(t+1, s' | s_t, a_t))
+            
+            # Policy Improvement
+            FOR each possible action a_prime:
+                if action adheres to constraints (b, a_prime, B_max, P_charge_max, P_discharge_max, SOC_min, SOC_max):
+                    
+                    # Estimate future state based on a_prime and update policy if it minimizes expected future cost
+                    b_prime = estimate_future_state(b, a_prime)
+                    
+                    # Future cost is the average of the stored future values if available, else zero
+                    if t < T-1 and future_values[t+1] exists
+                        future_cost_prime = mean(future_values[t+1])  
+                    else 
+                        future_cost_prime = 0
+                    
+                    expected_future_cost = c + future_cost_prime
+                    if expected_future_cost < V[t, b]:
+                        policy[t, b] = a_prime
+                        V[t, b] = expected_future_cost
+
