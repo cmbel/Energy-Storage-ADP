@@ -273,4 +273,4 @@ solar_simulation_array = list(solar_sim.values())
 
 # Start Monte Carlo Approximate Dynamic Programming optimization here
 
-# See Monte Carlo ADP Pseudocodo.txt to continue
+# See ReadME file, Project Requirements MS Word document, and Monte Carlo ADP Pseudocodo.txt for more information on how to continue
