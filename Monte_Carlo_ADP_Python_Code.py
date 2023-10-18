@@ -252,17 +252,20 @@ show_plots = True
 # How many intervals (columns) are there in the data? 24 = hourly data, 48 = half-hourly data, 96 = 15-minute data
 data_intervals = 48
 
+load_filename = 'load_data_house_1.csv'
+solar_filename = 'solar_data_house_1.csv'
+
 if distribution == 'gamma':
-    load_distributions, load_pdf_functions = fit_gamma_distribution('load_data.csv', show_plots)
-    solar_distributions, solar_pdf_functions = fit_gamma_distribution('solar_data.csv', show_plots)
+    load_distributions, load_pdf_functions = fit_gamma_distribution(load_filename, show_plots)
+    solar_distributions, solar_pdf_functions = fit_gamma_distribution(solar_filename, show_plots)
 
 elif distribution == 'gaussian':
-    load_distributions, load_pdf_functions = fit_gaussian_distribution('load_data.csv', show_plots)
-    solar_distributions, solar_pdf_functions = fit_gaussian_distribution('solar_data.csv', show_plots)
+    load_distributions, load_pdf_functions = fit_gaussian_distribution(load_filename, show_plots)
+    solar_distributions, solar_pdf_functions = fit_gaussian_distribution(solar_filename, show_plots)
 
 elif distribution == 'beta':
-    load_distributions, load_pdf_functions = fit_beta_distribution('load_data.csv', show_plots)
-    solar_distributions, solar_pdf_functions = fit_beta_distribution('solar_data.csv', show_plots)
+    load_distributions, load_pdf_functions = fit_beta_distribution(load_filename, show_plots)
+    solar_distributions, solar_pdf_functions = fit_beta_distribution(solar_filename, show_plots)
 
 intervals = [f"Interval_{i}" for i in range(1, data_intervals+1)]
 load_sim, solar_sim = generate_simulated_data(distribution,load_distributions, solar_distributions, intervals)
