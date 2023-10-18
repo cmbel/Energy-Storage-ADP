@@ -8,7 +8,7 @@ Some sample data from 10 residential households is provided. All meter data has 
 
 All households have their own solar installed. The homeowners are interested in installing an electric battery (also sometimes called a "battery" or "energy storage"), but are unsure how to schedule the battery. This is where an optimization algorithm will be helpful. The optimization algorithm will consider the load (kWh) and solar generation (kWh) and determine the best battery action ("charge", "discharge", or "idle") during every interval of the day. The output will be an optimal policy that tells the homeowner during which hours to charge, discharge, or idle.
 
-There are some constraints. See the accompanying MS Word file for mathematical equations. Also please see the "Projected battery adoption in the prosumer era.pdf" paper for the origin of the constraint equations.
+There are some constraints. See the accompanying "Model Equations and Constraints.docx" file for mathematical model and constraint equations. Also please see the "Projected battery adoption in the prosumer era.pdf" paper for the origin of the constraint equations.
   1. The optimization algorithm cannot tell the battery to exceed its maximum power ratings. For example, it cannot charge more than 5 kilowatts (kW) or discharge more than 5 kilowatts (kW).
      
   2. The optimization algorithm cannot tell the battery to exceed its state of charge. For example, the battery cannot charge more than 100% state of charge and cannot discharge less than 0%.
